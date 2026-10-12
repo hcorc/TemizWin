@@ -1,0 +1,12 @@
+# Temporary & Log files
+*.log
+temizwin_*.txt
+*.tmp
+
+# OS generated
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Test sandboxes
+_tests/sandbox/
