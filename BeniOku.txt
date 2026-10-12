@@ -1,0 +1,165 @@
+================================================================================
+                    TEMIZWIN - MODERN WINDOWS BAKIM & TEMIZLEME ARACI
+================================================================================
+
+1. NEDİR VE NASIL ÇALIŞIR?
+--------------------------------------------------------------------------------
+TemizWin; herhangi bir kurulum, harici kütüphane veya .exe dosyası gerektirmeyen,
+tamamen Windows'un yerleşik bileşenleri (WPF XAML + PowerShell) üzerinde çalışan
+saf PowerShell (.ps1) tabanlı, şeffaf ve açık kaynaklı bir sistem bakım, temizlik
+ve oyun optimizasyon aracıdır.
+
+- Klasör Yapısı:
+  * Baslat.bat    -> Programı çift tıklayarak açan başlatıcı dosya.
+  * TemizWin.ps1  -> Programın tüm arayüz, temizlik ve optimizasyon kodları.
+  * BeniOku.txt   -> Bu ayrıntılı kullanım kılavuzu.
+  * README.md     -> GitHub ana dokümantasyon dosyası.
+  * LICENSE       -> MIT Açık Kaynak Lisansı.
+
+- Çalıştırma Yöntemleri:
+  1. Klasör içindeki "Baslat.bat" dosyasına çift tıklayın. (Önerilen ve En Kolayı)
+  2. "TemizWin.ps1" dosyasına sağ tıklayıp "PowerShell ile Çalıştır" seçeneğini seçin.
+
+- Canlı İşlem Günlüğü (Dual Console):
+  Program açıldığında şık grafik arayüzün (WPF) arkasında bir PowerShell konsolu açık kalır.
+  Bu konsol, yapılan tüm temizlik, ayar ve onarım adımlarını renkli ve satır satır ekrana
+  yansıtarak tam şeffaflık sağlar. Gizli veya arka planda ne yaptığı belirsiz hiçbir işlem yoktur.
+
+- Yönetici Yetkisi:
+  Sistem dosyalarını onarmak, donanım sürücülerini denetlemek ve derin temizlik yapabilmek için
+  program otomatik olarak Yönetici izni (UAC) ister; açılan pencerede "Evet" demeniz yeterlidir.
+
+
+2. ANA EKRAN & ÖZET BİLGİLER
+--------------------------------------------------------------------------------
+Uygulama açıldığında en üstte sisteminizin canlı durumunu gösteren 4 kart ve RAM rozeti yer alır:
+- C: Boş Alan: C: sürücünüzdeki mevcut boş disk kapasitesi.
+- Temizlenebilir (Seçilen): Seçtiğiniz temizlik kutucuklarının toplam tahmini boyutu.
+- Güncellenecek: Winget tarafından tespit edilen güncellenebilir program sayısı.
+- Açılış Programı: Windows açılışında otomatik başlayan uygulama adedi ve son açılış süresi.
+- RAM Göstergesi ve ⚡ Boşalt Butonu:
+  * Üst çubukta anlık RAM kullanımını gösterir.
+  * "⚡ Boşalt" butonu, ISLC/RAMMap mantığıyla (NtSetSystemInformation) çalışır.
+  * Çalışan programlarınızı diske fırlatıp bilgisayarı takmaz; yalnızca arka plandaki
+    bekleyen disk dosya önbelleğini (Standby Cache) temizler.
+
+
+3. MODÜLLER VE İŞLEVLERİ
+--------------------------------------------------------------------------------
+
+A) PERFORMANS & OYUN MODU (🎮)
+   Oyunlarda gecikmeyi (DPC latency) düşürmek, anlık takılmaları önlemek ve maksimum
+   FPS elde etmek için tasarlanmış 14 adet kritik sistem ayarı içerir:
+   * HAGS (Donanım Hızlandırmalı GPU Zamanlaması): Grafik iş yükünü GPU'ya devreder.
+   * VBS & Bellek Bütünlüğü (HVCI): Oyunlarda FPS kaybı yaratan sanallaştırma tabanlı
+     güvenliği optimize eder (WSL ve Sandbox desteğini bozmaz).
+   * Nagle Ağ Algoritması: TCP paket gecikmesini kapatarak online oyun ping sıçramalarını önler.
+   * Doğrudan Tam Ekran (FSE / DWM Bypass): Pencere yöneticisini atlar, donanıma doğrudan erişir.
+   * Pencereli Mod İyileştirmeleri: Modern Flip Model ile pencereli mod giriş gecikmesini düşürür.
+   * Game DVR (Xbox Yakalama): Arka planda gizli video kaydı alan servisi kapatır.
+   * Windows Game Mode: Oyun açıkken arka plan işlemci önceliğini oyuna tahsis eder.
+   * Nihai / Yüksek Performans Güç Planı: İşlemci çekirdek park etmeyi engeller.
+   * Ağ Bağdaştırıcısı Donanım Yükü (Task Offload, LSO, RSS): Ağ paketlerini CPU'dan alır.
+   * SysMain (SuperFetch): SSD disklerde gereksiz disk okuma ve CPU yükünü engeller.
+   * Windows Search İndeksleme: Oyun sırasında diski tarayan arama motorunu durdurur.
+   * Dinamik Aydınlatma (RGB): Windows RGB gecikmelerini ve çakışmalarını önler.
+   * Görsel Efektler: Yazı tipi düzgünlüğünü (Font Smoothing) KORUYARAK animasyonları kapatır.
+
+   * AŞAMALI UYGULAMA BARI: Ayarları tek tek tıklayıp hemen uygulamaz. İstediklerinizi
+     seçersiniz; alttaki bar "Bekleyen: X ayar" der. "⚡ X değişikliği uygula" butonuna
+     bastığınızda topluca uygular. İstemezseniz "↺ Geri Al" ile anında eski haline döner.
+   * YENİDEN BAŞLATMA İSTEMİ: HAGS, VBS veya Nagle gibi ayarlar uygulandığında modern
+     bir açılır pencere ile hangi ayarların yeniden başlatma beklediğini listeler.
+
+
+B) SİSTEM İNCE AYARLARI (⚙️)
+   70'ten fazla Windows ayarını kategorize edilmiş geçiş anahtarları ile yönetin:
+   * Gizlilik & Telemetri: Windows tanılama verileri, DiagTrack dinleyicisi (özel SYSTEM
+     görev köprüsüyle), telemetri görevleri, konum, öneriler, kilit ekranı ve Edge reklamları.
+   * Yapay Zeka & Copilot: Copilot, Recall, Advanced AI, Click to Do, sistem AI servisi ve
+     Edge/Chrome/Paint/Notepad yapay zeka araçlarını tek tek açıp kapatma.
+   * Arayüz & Kişiselleştirme: Koyu Tema, Saydamlık, Animasyonlar, Spotlight, Snap düzenleri,
+     Alt-Tab davranışı, Klasik Sağ Tık, Fare ivmesi kapatma, Yapışkan Tuşlar.
+   * Dosya Gezgini & Görev Çubuğu: Dosya uzantıları, Gizli dosyalar, Kompakt mod, Çift sürücü
+     harflerini gizleme, Giriş/Galeri/OneDrive gizleme, Görevi Sonlandır (End Task) sağ tık,
+     Saat saniyeleri, Sistem tepsisi simgeleri, Görev çubuğunu sola alma, Widget ve Arama stilleri.
+   * Geliştirici: Windows Sandbox ve WSL (Linux Alt Sistemi) tek tıkla kurma/kaldırma.
+   * Aşamalı Uygulama Barı: Değişiklikleri kuyrukta biriktirip tek tıkla toplu uygulama/geri alma.
+
+
+C) TEMİZLİK MODÜLÜ (🗑️)
+   * ÖNEMLİ: Tüm kutucuklar varsayılan olarak KAPALIDIR; dilediklerinizi seçebilirsiniz.
+   * DOKUNULMAZLIK SÖZLEŞMESİ: Tarayıcı şifreleri, oturumlar, çerezler ve oyun kayıtlarına
+     (save dosyaları) KESİNLİKLE DOKUNULMAZ.
+   * 22 Temizlik Kategorisi:
+     - Geçici Sistem Dosyaları (%TEMP%, Windows\Temp)
+     - Windows Update Önbelleği (SoftwareDistribution)
+     - Geri Dönüşüm Kutusu & Olay Günlükleri (Event Logs)
+     - WinSxS Bileşen Temizliği (DISM)
+     - Windows.old & $WINDOWS.~BT (Eski Windows kalıntıları)
+     - Eski Donanım Sürücüleri (Driver Store - pnputil): 2 aşamalı (Tarih ve Sürüm)
+       güvenlik algoritmasıyla yalnızca kullanılmayan eski sürücüleri temizler, yenileri korur.
+     - Tarayıcı Önbellekleri: Chrome, Edge, Firefox, Opera & Opera GX, Brave
+     - Geliştirici & Uygulamalar: VS Code, Notion, Python/pip, VLC, Discord, Spotify, Teams
+     - Shader Önbellekleri: DirectX, NVIDIA, AMD DirectX/GL cache
+     - Oyun İstemcileri: Steam, Epic Games, EA App (Sadece web/HTML ve loglar silinir)
+     - Kırık Kısayollar: Masaüstü ve Başlat menüsündeki hedefi silinmiş kısayolları temizler.
+     - Çökme Dökümleri (Crash Dumps), Küçük Resimler (Thumbnails), Prefetch ve Font Önbelleği.
+
+
+D) SAĞ TIK (BAĞLAM MENÜSÜ) YÖNETİCİSİ (🖱️)
+   * Hızlı Araçlar:
+     - 💻 Terminali Yönetici Olarak Aç
+     - 🛡️ Sahipliği Al (Take Ownership / icacls)
+     - 📝 Not Defteri ile Aç
+     - 📋 Dosya / Klasör Yolunu Kopyala
+     - 🔍 VirusTotal ile Tara
+   * Klasik Sağ Tık Menüsü: Windows 11'in hantal menüsünü tek tıkla klasik Windows 10 stiline çevirir.
+   * Özel Uygulama Ekleme: İstediğiniz herhangi bir programı (.exe) seçip sağ tık menüsüne ekleyin.
+   * Kabuk Öğeleri: Mevcut üçüncü parti sağ tık eklentilerini tarayıp açma/kapatma.
+
+
+E) BLOATWARE KALDIRICI (🛡️)
+   * Windows ile gelen gereksiz yerleşik uygulamaları (Haberler, Hava Durumu, Clipchamp, Xbox vb.)
+     güvenle tarar ve listeler.
+   * "Güvenlileri Seç" butonu ile sistem kararlılığını bozmayan uygulamaları tek tıkla seçtirir.
+   * Microsoft Edge ve OneDrive için özel bağımsız kaldırma fonksiyonları içerir.
+
+
+F) YAZILIM GÜNCELLEME MOTORU (🔄)
+   * Microsoft Winget altyapısıyla bilgisayarınızdaki tüm programları tarar.
+   * Sıra tabanlı (FIFO) kuyrukla güncellemeleri arka planda arayüzü dondurmadan tamamlar.
+   * Güncelleme sonrasında sürüm doğrulaması yapar.
+
+
+G) AÇILIŞ PROGRAMLARI & HİZMETLER (🚀)
+   * HKCU, HKLM ve Başlangıç klasöründeki otomatik başlayan uygulamaları listeler.
+   * Windows Kayıt Defteri ikili verilerini (StartupApproved) bozmadan güvenle açar/kapatır.
+   * Sistem açılış süresini (LastBootUpTime) anlık rozet olarak gösterir.
+   * Windows Hizmetler (services.msc) paneline doğrudan erişim sağlar.
+
+
+H) SAĞLIK & ONARIM MODÜLÜ (🩺)
+   * SFC /scannow & DISM (ScanHealth / RestoreHealth): Sistem dosyalarını doğrular ve onarır.
+   * Canlı Disk Taraması (chkdsk C: /scan): Sistemi yeniden başlatmadan diski canlı tarar.
+   * S.M.A.R.T. Disk Sağlığı: SSD ve HDD donanım aşınma seviyesi, sağlık ve sıcaklık bilgisi.
+   * DNS Profilleri: Google DNS, Cloudflare (1.1.1.1), Quad9 ve Varsayılan profilleri tek tıkla uygular.
+   * Ağ, Mağaza ve Windows Update Sıfırlama: Winsock, TCP/IP, wsreset ve WU servislerini onarır.
+   * Bellek Tanılama (mdsched.exe): Windows RAM donanım testini başlatır.
+   * Canlı Terminal: Tüm komut çıktıları UTF-16LE ve UTF-8 destekli terminalden canlı izlenir.
+
+
+I) BÜYÜK DOSYA AVCISI (🔍)
+   * Bağımsız bir STA Runspace iş parçacığında çalışır; taranırken arayüz donmaz ve iptal edilebilir.
+   * İndirilenler, Belgeler veya tüm sürücülerdeki devasa dosyaları (100 MB+, 500 MB+, 1 GB+) listeler.
+   * Dosya konumunu doğrudan açma veya tek tıkla güvenli silme imkanı sunar.
+
+
+4. GÜVENLİK VE GERİ ALINABİLİRLİK
+--------------------------------------------------------------------------------
+- %100 Açık Kaynak: Kodları doğrudan TemizWin.ps1 dosyasını bir metin düzenleyiciyle açarak
+  satır satır denetleyebilirsiniz.
+- Sıfır Telemetri: Hiçbir veri toplanmaz, internete gönderilmez.
+- Tam Geri Alınabilirlik: Yapılan her ayar dilediğiniz an geri alınabilir ve sistem
+  orijinal durumuna döndürülebilir.
+================================================================================
